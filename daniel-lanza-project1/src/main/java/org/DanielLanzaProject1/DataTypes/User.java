@@ -1,23 +1,22 @@
-package org.DanielLanzaProject1.DataObjClasses;
+package org.DanielLanzaProject1.DataTypes;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.sql.*;
-import javax.sql.*;
-
-public class User {
+public abstract class User {
     // Basic attributes for a user account.
     // A username and password.
     /* Attributes are set to private, so that they may only be
     *  accessed through getter and update methods*/
+    private String username;
+    private String password;
 
+
+    // Optinal attributes
     private int id;
     private String firstName;
     private String lastName;
     private String email;
-    private String username;
-    private String password;
     private String phoneNum;
+
+    private boolean isManager;
 
     /*
     These are the constructor of the User class.
@@ -25,59 +24,41 @@ public class User {
     The non-phone number constructor.
     The phone number inclusive constructor;
      */
-    public User(){
-
-    }
-
-    public User(String firstName,String lastName,String email,String username,String password){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String firstName,String lastName,String email,String username,String password,String phoneNum){
-        this(firstName,lastName,email,username,password);
-        this.phoneNum = phoneNum;
-    }
 
 
     //The getter methods.
-
-
     public int getId() {
         return id;
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public String getPhoneNum() {
-        return phoneNum;
+        return this.phoneNum;
     }
+
+    public boolean getIsManager(){ return this.isManager;}
 
 
     // The setter methods.
-
-
     public void setId(int id) {
         this.id = id;
     }
@@ -105,6 +86,8 @@ public class User {
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
+
+    public void setIsManager(boolean manager){ this.isManager = manager;}
 
 
 

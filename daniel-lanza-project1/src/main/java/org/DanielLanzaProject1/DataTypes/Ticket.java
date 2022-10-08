@@ -1,31 +1,42 @@
-package org.DanielLanzaProject1.DataObjClasses;
+package org.DanielLanzaProject1.DataTypes;
 
 public class Ticket {
 
     public static final String[] statusCase = {"approved","declined","pending"};
 
 
+    // The basic attributes of a ticket.
+    private double cash;
+    private String description = "";
+    private String status;
+
+
+    //The other basic attributes of a ticket.
     private int id;
     private int employeeID;
     private String employeeFN;
-    private String getEmployeeLN;
-    private double cash;
-    private String status;
+    private String employeeLN;
+
+
     private String date;
-    private String message = "";
+
 
 
     // The constructors for the ticket objects.
     public Ticket(){
-
+        this.status = statusCase[2];
     }
 
-    public Ticket(int id,int employeeID,String employeeFN, String getEmployeeLN,double cash){
-        this.id = id;
+    public Ticket(int employeeID,double cash,String description){
         this.employeeID = employeeID;
-        this.employeeFN = employeeFN;
-        this.getEmployeeLN = employeeFN;
         this.cash = cash;
+        this.description = description;
+    }
+
+    public Ticket(int employeeID,double cash,String description,String employeeFN, String employeeLN){
+        this(employeeID,cash,description);
+        this.employeeFN = employeeFN;
+        this.employeeLN = employeeLN;
     }
 
 
@@ -44,8 +55,8 @@ public class Ticket {
         return employeeFN;
     }
 
-    public String getGetEmployeeLN() {
-        return getEmployeeLN;
+    public String getEmployeeLN() {
+        return employeeLN;
     }
 
     public double getCash() {
@@ -60,8 +71,8 @@ public class Ticket {
         return date;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDescription() {
+        return description;
     }
 
 
@@ -79,8 +90,8 @@ public class Ticket {
         this.employeeFN = employeeFN;
     }
 
-    public void setGetEmployeeLN(String getEmployeeLN) {
-        this.getEmployeeLN = getEmployeeLN;
+    public void setGetEmployeeLN(String employeeLN) {
+        this.employeeLN = employeeLN;
     }
 
     public void setCash(double cash) {
@@ -95,7 +106,15 @@ public class Ticket {
         this.date = date;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDescription(String message) {
+        this.description = message;
     }
+
+
+    //Methods for ticket status.
+    public void changeStatus(int i){
+        this.setStatus(Ticket.statusCase[i]);
+    }
+
+
 }
