@@ -28,6 +28,7 @@ public class Ticket {
     }
 
     public Ticket(int employeeID,double cash,String description){
+        this();
         this.employeeID = employeeID;
         this.cash = cash;
         this.description = description;

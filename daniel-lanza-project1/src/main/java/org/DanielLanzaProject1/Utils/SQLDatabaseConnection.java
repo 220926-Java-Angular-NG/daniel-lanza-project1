@@ -47,7 +47,7 @@ public class SQLDatabaseConnection {
 
         try{
 
-            FileInputStream fileInputStream = new FileInputStream("src/main/resources/jdbc.properties");
+            FileInputStream fileInputStream = new FileInputStream("src/main/resources/jdcb.properties");
             properties.load(fileInputStream);
 
         }catch(IOException fileNotFoundException){
@@ -57,5 +57,7 @@ public class SQLDatabaseConnection {
         return properties;
 
     }
+
+
 
 }
