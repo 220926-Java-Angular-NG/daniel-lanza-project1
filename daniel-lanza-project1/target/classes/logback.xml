@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration debug="true">
+
+    <property name = "LOGS" value = "./logs"/>
+
+    <appender name = "STDOUT" class = "cs.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss:SSS} [%thread] %-5level %logger{40} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name = "RFAppender" class = "cs.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/archived/daniel-lanza-project1-logger.log</file>
+
+        <encoder>
+            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+        </encoder>
+
+        <rollingPolicy class = "cs.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOGS}/archived/daniel-lanza-project1-logger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class = "cs.qos.logback.core.rolling.SizeAndTimeBasedNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+    </appender>
+
+    <root level = "INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+
+    <logger name="org.example" level = "INFO" additivity = "false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RFAppender"/>
+    </logger>
+
+
+</configuration>
