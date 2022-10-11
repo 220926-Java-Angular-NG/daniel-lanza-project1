@@ -16,9 +16,9 @@ public class Ticket {
     private int employeeID;
     private String employeeFN;
     private String employeeLN;
-
-
     private String date;
+
+    private boolean processed;
 
 
 
@@ -32,6 +32,7 @@ public class Ticket {
         this.employeeID = employeeID;
         this.cash = cash;
         this.description = description;
+        this.processed = false;
     }
 
     public Ticket(int employeeID,double cash,String description,String employeeFN, String employeeLN){
@@ -76,6 +77,9 @@ public class Ticket {
         return description;
     }
 
+    public boolean isProcessed() {
+        return processed;
+    }
 
     // The setter methods.
 
@@ -112,9 +116,15 @@ public class Ticket {
     }
 
 
+
+
     //Methods for ticket status.
     public void changeStatus(int i){
         this.setStatus(Ticket.statusCase[i]);
+    }
+
+    public void processTicket(){
+        this.processed = true;
     }
 
 

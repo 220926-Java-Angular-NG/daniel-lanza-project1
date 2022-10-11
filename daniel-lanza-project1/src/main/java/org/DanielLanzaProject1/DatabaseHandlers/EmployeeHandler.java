@@ -18,11 +18,11 @@ public class EmployeeHandler {
     }
 
 
-    public int createUser(Employee employee){
+    public int createEmployee(Employee employee){
         return employeeDb.create(employee);
     }
 
-    public List<Employee> getAllManagers(){
+    public List<Employee> getAllEmployees(){
         return employeeDb.getAll();
     }
 
