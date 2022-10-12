@@ -123,6 +123,11 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
     }
 
     @Override
+    public Ticket getByCredentials(String username, String password) {
+        return null;
+    }
+
+    @Override
     public Ticket update(Ticket ticket) {
 
         try{

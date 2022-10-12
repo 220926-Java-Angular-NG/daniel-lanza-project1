@@ -30,6 +30,15 @@ public class EmployeeHandler {
         return employeeDb.getId(id);
     }
 
+    public Employee getByCredentials(String u,String p){
+        return employeeDb.getByCredentials(u,p);
+    }
+
+    public boolean usernameExists(String username){
+        Employee e = employeeDb.getByUsername(username);
+        return (e.getUsername()!= null);
+    }
+
     public Employee updateEmployee(Employee employee){
         return employeeDb.update(employee);
     }

@@ -64,7 +64,7 @@ public class ManagerDatabase implements DatabaseInterface<Manager>{
 
         try{
 
-            String sql = "SELECT * FROM user_list";
+            String sql = "SELECT * FROM user_list WHERE is_manager = true";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 
@@ -98,7 +98,7 @@ public class ManagerDatabase implements DatabaseInterface<Manager>{
     public Manager getId(int id) {
 
         try{
-            String sql = "SELECT * FROM user_list WHERE id=?";
+            String sql = "SELECT * FROM user_list WHERE id=? AND is_manager = true";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             pstmt.setInt(1,id);
             ResultSet rs = pstmt.executeQuery();
@@ -123,6 +123,69 @@ public class ManagerDatabase implements DatabaseInterface<Manager>{
             System.out.println(sqlException.getMessage());
         }
 
+
+        return null;
+    }
+
+    public Manager getByUsername(String username){
+        try{
+            String sql = "SELECT * FROM user_list WHERE username = ?";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            ResultSet rs = pstmt.executeQuery();
+
+            Manager manager = new Manager();
+
+            while (rs.next()){
+                manager.setId(rs.getInt("id"));
+                manager.setUsername(rs.getString("username"));
+                manager.setPassword(rs.getString("password"));
+                manager.setFirstName(rs.getString("first_name"));
+                manager.setLastName(rs.getString("last_name"));
+                manager.setEmail(rs.getString("email"));
+                manager.setPhoneNum(rs.getString("phone_number"));
+                manager.setIsManager(rs.getBoolean("is_manager"));
+
+            }
+
+            return manager;
+
+        }catch (SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
+
+        return null;
+    }
+
+    @Override
+    public Manager getByCredentials(String username, String password) {
+
+        try{
+            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ? AND is_manager = true";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,password);
+            ResultSet rs = pstmt.executeQuery();
+
+            Manager manager = new Manager();
+
+            while (rs.next()){
+                manager.setId(rs.getInt("id"));
+                manager.setUsername(rs.getString("username"));
+                manager.setPassword(rs.getString("password"));
+                manager.setFirstName(rs.getString("first_name"));
+                manager.setLastName(rs.getString("last_name"));
+                manager.setEmail(rs.getString("email"));
+                manager.setPhoneNum(rs.getString("phone_number"));
+                manager.setIsManager(rs.getBoolean("is_manager"));
+
+            }
+
+            return manager;
+
+        }catch (SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
 
         return null;
     }

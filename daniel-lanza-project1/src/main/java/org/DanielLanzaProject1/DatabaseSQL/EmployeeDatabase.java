@@ -61,7 +61,7 @@ public class EmployeeDatabase implements DatabaseInterface<Employee>{
 
         try{
 
-            String sql = "SELECT * FROM user_list";
+            String sql = "SELECT * FROM user_list WHERE is_manager = false";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 
@@ -93,7 +93,7 @@ public class EmployeeDatabase implements DatabaseInterface<Employee>{
     public Employee getId(int id) {
 
         try{
-            String sql = "SELECT * FROM user_list WHERE id=?";
+            String sql = "SELECT * FROM user_list WHERE id=? AND is_manager = false";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             pstmt.setInt(1,id);
             ResultSet rs = pstmt.executeQuery();
@@ -117,6 +117,71 @@ public class EmployeeDatabase implements DatabaseInterface<Employee>{
         }catch (SQLException sqlException){
             System.out.println(sqlException.getMessage());
         }
+
+        return null;
+    }
+
+    public Employee getByUsername(String username){
+        try{
+            String sql = "SELECT * FROM user_list WHERE username = ?";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            ResultSet rs = pstmt.executeQuery();
+
+            Employee employee = new Employee();
+
+            while (rs.next()){
+                employee.setId(rs.getInt("id"));
+                employee.setUsername(rs.getString("username"));
+                employee.setPassword(rs.getString("password"));
+                employee.setFirstName(rs.getString("first_name"));
+                employee.setLastName(rs.getString("last_name"));
+                employee.setEmail(rs.getString("email"));
+                employee.setPhoneNum(rs.getString("phone_number"));
+                employee.setIsManager(rs.getBoolean("is_manager"));
+
+            }
+
+            return employee;
+
+        }catch (SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
+
+
+        return null;
+    }
+
+    @Override
+    public Employee getByCredentials(String username, String password) {
+
+        try{
+            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ? AND is_manager =false";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,password);
+            ResultSet rs = pstmt.executeQuery();
+
+            Employee employee = new Employee();
+
+            while (rs.next()){
+                employee.setId(rs.getInt("id"));
+                employee.setUsername(rs.getString("username"));
+                employee.setPassword(rs.getString("password"));
+                employee.setFirstName(rs.getString("first_name"));
+                employee.setLastName(rs.getString("last_name"));
+                employee.setEmail(rs.getString("email"));
+                employee.setPhoneNum(rs.getString("phone_number"));
+                employee.setIsManager(rs.getBoolean("is_manager"));
+
+            }
+
+            return employee;
+
+        }catch (SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
+
 
         return null;
     }

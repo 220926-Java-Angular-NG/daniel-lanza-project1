@@ -11,6 +11,8 @@ public interface DatabaseInterface<T> {
 
     T getId(int id);
 
+    T getByCredentials(String username,String password);
+
     T update(T t);
 
     boolean delete(T t);
