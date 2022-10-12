@@ -8,17 +8,20 @@ public class Ticket {
     // The basic attributes of a ticket.
     private double cash;
     private String description = "";
-    private String status;
+    private String status; // Intialized in the constructor
 
 
     //The other basic attributes of a ticket.
-    private int id;
+    private int id; // Initialized in the SQL
     private int employeeID;
     private String employeeFN;
     private String employeeLN;
-    private String date;
 
-    private boolean processed;
+
+
+    private String date; // Initialized in the SQL
+
+    private boolean processed; // Initialized in the constructor
 
 
 
@@ -27,16 +30,15 @@ public class Ticket {
         this.status = statusCase[2];
     }
 
-    public Ticket(int employeeID,double cash,String description){
+    public Ticket(double cash,String description){
         this();
-        this.employeeID = employeeID;
         this.cash = cash;
         this.description = description;
         this.processed = false;
     }
 
     public Ticket(int employeeID,double cash,String description,String employeeFN, String employeeLN){
-        this(employeeID,cash,description);
+        this(cash,description);
         this.employeeFN = employeeFN;
         this.employeeLN = employeeLN;
     }
@@ -77,7 +79,7 @@ public class Ticket {
         return description;
     }
 
-    public boolean isProcessed() {
+    public boolean getIsProcessed() {
         return processed;
     }
 
@@ -95,7 +97,7 @@ public class Ticket {
         this.employeeFN = employeeFN;
     }
 
-    public void setGetEmployeeLN(String employeeLN) {
+    public void setEmployeeLN(String employeeLN) {
         this.employeeLN = employeeLN;
     }
 
@@ -113,6 +115,10 @@ public class Ticket {
 
     public void setDescription(String message) {
         this.description = message;
+    }
+
+    public void setIsProcessed(boolean b){
+        this.processed = b;
     }
 
 

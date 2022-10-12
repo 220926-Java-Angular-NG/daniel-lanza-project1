@@ -194,7 +194,24 @@ public class UserControl {
     };
 
     public Handler userLogin = context -> {
-        
+        Manager m = context.bodyAsClass(Manager.class);
+
+        String u = m.getPassword();
+        String p = m.getPassword();
+        m = managerHandler.getByCredentials(u,p);
+
+        boolean exists = managerHandler.usernameExists(u);
+        boolean isManager = managerHandler.isManager(m);
+
+        if (exists && isManager){
+
+        }else if(exists && !isManager){
+
+        }else{
+            context.result("Wrong login credentials, or the user does not exist.").status(404);
+        }
+
+
     };
 
 

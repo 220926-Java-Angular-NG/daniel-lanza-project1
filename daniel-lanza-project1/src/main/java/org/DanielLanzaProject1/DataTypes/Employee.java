@@ -30,10 +30,4 @@ public class Employee extends User{
 
 
 
-    public Ticket createTicket(double amount,String description){
-        int id = this.getId();
-        return new Ticket(id,amount,description);
-    }
-
-
 }

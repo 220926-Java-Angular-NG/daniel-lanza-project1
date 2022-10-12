@@ -1,11 +1,16 @@
 package org.DanielLanzaProject1.Session;
 
 import io.javalin.http.Handler;
+import org.DanielLanzaProject1.DataTypes.Employee;
+import org.DanielLanzaProject1.DataTypes.Ticket;
+import org.DanielLanzaProject1.DatabaseHandlers.*;
 
 public class LogIn {
 
     private String username;
     private String password;
+    static EmployeeHandler employeeHandler = new EmployeeHandler();
+    static TicketHandler ticketHandler = new TicketHandler();
 
     public LogIn(){}
 
@@ -71,9 +76,51 @@ public class LogIn {
                 +"username: yourUsername\n"
                 +"password: yourPassword\n"
                 +"}\n"
-                +"}\n"
+                +"\n"
                 +" and POST it at http://localhost:8080/log-in.\n");
     };
+
+    public static Handler submitTicketInstructions = context -> {
+        context.result("To create and submit reimbursement ticket, please enter\n"
+                +"the ticket information in the JSON format shown below\n"
+                +"\n"
+                +"\n"
+                +"{\n"
+                +"cash: employeeAmount\n"
+                +"description: employeeDescription\n"
+                +"}\n"
+                +"\n"
+                +"and POST it to http://localhost:8080/user="
+                + context.pathParam("id")+"/submit-ticket");
+
+    };
+
+
+    public static Handler getSubmitTicket = context -> {
+        Ticket ticket = context.bodyAsClass(Ticket.class);
+
+        int employeeID = Integer.parseInt(context.pathParam("id"));
+        Employee employee = employeeHandler.getByID(employeeID);
+
+        ticket.setEmployeeID(employee.getId());
+        ticket.setEmployeeFN(employee.getFirstName());
+        ticket.setEmployeeLN(employee.getLastName());
+
+        int ticketID = ticketHandler.createTicket(ticket);
+
+        if(ticketID>0){
+            context.result("Ticket with ID = "
+                            + Integer.toBinaryString(ticketID)
+                            + " has been successfully submitted");
+        }else{
+            context.result("Failed to submit ticket.");
+        }
+
+    };
+
+
+
+
 
 
 

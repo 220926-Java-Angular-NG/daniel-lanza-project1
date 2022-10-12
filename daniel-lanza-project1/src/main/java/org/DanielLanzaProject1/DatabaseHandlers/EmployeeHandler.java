@@ -1,6 +1,7 @@
 package org.DanielLanzaProject1.DatabaseHandlers;
 
 import org.DanielLanzaProject1.DataTypes.Employee;
+import org.DanielLanzaProject1.DataTypes.Manager;
 import org.DanielLanzaProject1.DatabaseSQL.EmployeeDatabase;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class EmployeeHandler {
     public Employee getByCredentials(String u,String p){
         return employeeDb.getByCredentials(u,p);
     }
+
 
     public boolean usernameExists(String username){
         Employee e = employeeDb.getByUsername(username);

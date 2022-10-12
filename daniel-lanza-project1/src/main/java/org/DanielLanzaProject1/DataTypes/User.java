@@ -1,6 +1,6 @@
 package org.DanielLanzaProject1.DataTypes;
 
-public abstract class User {
+public class User {
     // Basic attributes for a user account.
     // A username and password.
     /* Attributes are set to private, so that they may only be
@@ -16,7 +16,7 @@ public abstract class User {
     private String email;
     private String phoneNum;
 
-    private boolean isManager;
+    private Boolean isManager;
 
     /*
     These are the constructor of the User class.
@@ -55,7 +55,7 @@ public abstract class User {
         return this.phoneNum;
     }
 
-    public boolean getIsManager(){ return this.isManager;}
+    public Boolean getIsManager(){ return this.isManager;}
 
 
     // The setter methods.

@@ -32,7 +32,8 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
     public int create(Ticket ticket) {
 
         try{
-            String sql = "INSERT INTO ticket_list (id,user_id,first_name,last_name,amount,description,status,submission_date) VALUES (default,?,?,?,?,?,?,NOW())";
+            String sql = "INSERT INTO ticket_list (id,user_id,first_name,last_name,amount,description,status,submission_date,processed)"
+                        +" VALUES (default,?,?,?,?,?,?,NOW(),?)";
             PreparedStatement stmt = sqlDBconn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             stmt.setInt(1,ticket.getEmployeeID());
@@ -41,6 +42,7 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
             stmt.setDouble(4,ticket.getCash());
             stmt.setString(5,ticket.getDescription());
             stmt.setString(6,ticket.getStatus());
+            stmt.setBoolean(7,ticket.getIsProcessed());
 
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
@@ -70,11 +72,12 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
                 ticket.setId(rs.getInt("id"));
                 ticket.setEmployeeID(rs.getInt("user_id"));
                 ticket.setEmployeeFN(rs.getString("first_name"));
-                ticket.setGetEmployeeLN(rs.getString("last_name"));
+                ticket.setEmployeeLN(rs.getString("last_name"));
                 ticket.setCash(rs.getDouble("amount"));
                 ticket.setDescription(rs.getString("description"));
                 ticket.setStatus(rs.getString("status"));
                 ticket.setDate(rs.getDate("submission_date").toString());
+                ticket.setIsProcessed(rs.getBoolean("processed"));
 
                 tickets.add(ticket);
             }
@@ -104,11 +107,12 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
                 ticket.setId(rs.getInt("id"));
                 ticket.setEmployeeID(rs.getInt("user_id"));
                 ticket.setEmployeeFN(rs.getString("first_name"));
-                ticket.setGetEmployeeLN(rs.getString("last_name"));
+                ticket.setEmployeeLN(rs.getString("last_name"));
                 ticket.setCash(rs.getDouble("amount"));
                 ticket.setDescription(rs.getString("description"));
                 ticket.setStatus(rs.getString("status"));
                 ticket.setDate(rs.getDate("submission_date").toString());
+                ticket.setIsProcessed(rs.getBoolean("processed"));
 
             }
 
@@ -131,10 +135,11 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
     public Ticket update(Ticket ticket) {
 
         try{
-            String sql = "UPDATE ticket_list SET status = ? WHERE id=?";
+            String sql = "UPDATE ticket_list SET status = ?,processed = ? WHERE id=?";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1,ticket.getStatus());
-            pstmt.setInt(2,ticket.getId());
+            pstmt.setBoolean(2,ticket.getIsProcessed());
+            pstmt.setInt(3,ticket.getId());
             ResultSet rs = pstmt.executeQuery();
 
 

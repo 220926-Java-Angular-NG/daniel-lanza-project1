@@ -36,9 +36,18 @@ public class ManagerHandler {
         return (m.getUsername() != null);
     }
 
+    public boolean isManager(Manager manager){
+        if(manager.getIsManager()==null){
+            return false;
+        }else{
+            return manager.getIsManager();
+        }
+    }
+
     public Manager getByCredentials(String u,String p){
         return managerDb.getByCredentials(u,p);
     }
+
 
     public Manager updateManager(Manager manager){
         return managerDb.update(manager);

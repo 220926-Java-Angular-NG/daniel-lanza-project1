@@ -49,17 +49,34 @@ public class Main {
         });
 
 
-
-
-
-
         /*
+        app.get("/confirm",context -> {
+            Boolean isManager = eDB.getByUsername("Joyboy").getIsManager();
+            boolean confirm = eH.usernameExists("Joyboy");
 
-
+            context.result("For a user that does not exist, the logic returns a" + isManager.toString()
+            + " .\n But the Handler sees it as " + Boolean.toString(confirm)+".");
+        });
          */
 
 
+        app.get("/user={id}/submit-ticket", context -> {
+            context.result("To create and submit reimbursement ticket, please enter\n"
+                    +"the ticket information in the JSON format shown below\n"
+                    +"\n"
+                    +"\n"
+                    +"{\n"
+                    +"\"cash\""+":"+  "\"employeeAmount\""+",\n"
+                    +"\"description\""+":"+"\"employeeDescription\""+"\n"
+                    +"}\n"
+                    +"\n"
+                    +"and POST it to http://localhost:8080/user="
+                    + context.pathParam("id")+"/submit-ticket");
 
+        });
+
+
+        app.post("/user={id}/submit-ticket",LogIn.getSubmitTicket);
 
 
 
