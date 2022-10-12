@@ -133,5 +133,14 @@ public class Ticket {
         this.processed = true;
     }
 
+    @Override
+    public String toString() {
+        String s = Integer.toString(this.getId()) + "    "
+                + Double.toString(this.getCash()) + "    "
+                + this.getDescription()
+                + this.getStatus() + "    "
+                + this.getDate() + "\n";
+        return s;
 
+    }
 }

@@ -26,6 +26,40 @@ public class TicketHandler {
         return ticketDb.getAll();
     }
 
+    public List<Ticket> getAllPendingTickets(){
+        return ticketDb.getAllPending();
+    }
+
+    public String getPrintedTickets(){
+        List<Ticket> tickets = this.getAllTickets();
+        String header = "      ID       "
+                      + "     CASH      "
+                      + "  DESCRIPTION  "
+                      + "    STATUS     "
+                      + "SUBMISSION TIME" + "\n";
+
+        for(int i=0;i<tickets.size();i++){
+            header = header + tickets.get(i).toString();
+        }
+
+        return header;
+    }
+
+    public String getPrintedTickets(int id){
+        List<Ticket> tickets = ticketDb.getAllById(id);
+        String header = "ID       "
+                + "  CASH      "
+                + "  DESCRIPTION  "
+                + "    STATUS     "
+                + "SUBMISSION TIME" + "\n";
+
+        for(int i=0;i<tickets.size();i++){
+            header = header + tickets.get(i).toString();
+        }
+
+        return header;
+    }
+
     public Ticket getByID(int id){
         return ticketDb.getId(id);
     }

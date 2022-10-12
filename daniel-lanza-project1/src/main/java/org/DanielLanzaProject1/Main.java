@@ -76,7 +76,7 @@ public class Main {
         });
 
 
-        app.post("/user={id}/submit-ticket",LogIn.getSubmitTicket);
+        app.get("/user={id}/submissions",LogIn.getUserTickets);
 
 
 

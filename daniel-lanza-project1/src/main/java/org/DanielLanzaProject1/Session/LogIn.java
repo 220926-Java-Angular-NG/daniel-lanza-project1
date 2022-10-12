@@ -80,6 +80,8 @@ public class LogIn {
                 +" and POST it at http://localhost:8080/log-in.\n");
     };
 
+
+    // Submit ticket feature.
     public static Handler submitTicketInstructions = context -> {
         context.result("To create and submit reimbursement ticket, please enter\n"
                 +"the ticket information in the JSON format shown below\n"
@@ -94,7 +96,6 @@ public class LogIn {
                 + context.pathParam("id")+"/submit-ticket");
 
     };
-
 
     public static Handler getSubmitTicket = context -> {
         Ticket ticket = context.bodyAsClass(Ticket.class);
@@ -116,6 +117,13 @@ public class LogIn {
             context.result("Failed to submit ticket.");
         }
 
+    };
+
+
+    // Print employee tickets.
+    public static Handler getUserTickets = context -> {
+        int employeeID = Integer.parseInt(context.pathParam("id"));
+        context.result(ticketHandler.getPrintedTickets(employeeID));
     };
 
 

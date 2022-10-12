@@ -63,7 +63,7 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
 
         try{
 
-            String sql = "SELECT * FROM ticket_list";
+            String sql = "SELECT * FROM ticket_list ORDER BY status,submission_date";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 
@@ -90,6 +90,81 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
 
 
         return null;
+    }
+
+    public List<Ticket> getAllById(int id){
+        List<Ticket> tickets = new ArrayList<Ticket>();
+
+        try{
+
+            String sql = "SELECT * FROM ticket_list "
+                       + "WHERE user_id = ?"
+                       + "ORDER BY status,submission_date";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            pstmt.setInt(1,id);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getInt("id"));
+                ticket.setEmployeeID(rs.getInt("user_id"));
+                ticket.setEmployeeFN(rs.getString("first_name"));
+                ticket.setEmployeeLN(rs.getString("last_name"));
+                ticket.setCash(rs.getDouble("amount"));
+                ticket.setDescription(rs.getString("description"));
+                ticket.setStatus(rs.getString("status"));
+                ticket.setDate(rs.getDate("submission_date").toString());
+                ticket.setIsProcessed(rs.getBoolean("processed"));
+
+                tickets.add(ticket);
+            }
+
+            return tickets;
+
+        }catch(SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
+
+
+        return null;
+    }
+
+    public List<Ticket> getAllPending(){
+
+        List<Ticket> tickets = new ArrayList<Ticket>();
+
+        try{
+
+            String sql = "SELECT * FROM ticket_list "
+                       + "WHERE status = pending "
+                       + "ORDER BY submission_date";
+            PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getInt("id"));
+                ticket.setEmployeeID(rs.getInt("user_id"));
+                ticket.setEmployeeFN(rs.getString("first_name"));
+                ticket.setEmployeeLN(rs.getString("last_name"));
+                ticket.setCash(rs.getDouble("amount"));
+                ticket.setDescription(rs.getString("description"));
+                ticket.setStatus(rs.getString("status"));
+                ticket.setDate(rs.getDate("submission_date").toString());
+                ticket.setIsProcessed(rs.getBoolean("processed"));
+
+                tickets.add(ticket);
+            }
+
+            return tickets;
+
+        }catch(SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
+
+
+        return null;
+
     }
 
     @Override
