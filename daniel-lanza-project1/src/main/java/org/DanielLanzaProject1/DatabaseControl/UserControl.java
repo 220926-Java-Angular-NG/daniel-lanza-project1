@@ -156,63 +156,9 @@ public class UserControl {
     };
 
     //Universal handlers.
-    public Handler createNewUser = context -> {
-
-        if(context.pathParam("userType").equals("employees")){
-            Employee employee = context.bodyAsClass(Employee.class);
-            if(!employeeHandler.usernameExists(employee.getUsername())){
-                int id = employeeHandler.createEmployee(employee);
-                if(id>0){
-                    employee.setId(id);
-                    context.json(employee);
-                }else{
-                    context.result("Employee user not created").status(400);
-                }
-            }else{
-                context.result("This username already exists. Please enter a different one.");
-            }
-
-        } else if (context.pathParam("userType").equals("managers")) {
-            Manager manager = context.bodyAsClass(Manager.class);
-            if(!managerHandler.usernameExists(manager.getUsername())){
-                int id = managerHandler.createUser(manager);
-                if(id>0){
-                    manager.setId(id);
-                    context.json(manager);
-                }else{
-                    context.result("Manager not created").status(400);
-                }
-            }else{
-                context.result("This username already exists. Please enter a different one.");
-            }
-
-        }else {
-            context.result("Invalid url").status(404);
-        }
 
 
-    };
 
-    public Handler userLogin = context -> {
-        Manager m = context.bodyAsClass(Manager.class);
-
-        String u = m.getPassword();
-        String p = m.getPassword();
-        m = managerHandler.getByCredentials(u,p);
-
-        boolean exists = managerHandler.usernameExists(u);
-        boolean isManager = managerHandler.isManager(m);
-
-        if (exists && isManager){
-
-        }else if(exists && !isManager){
-
-        }else{
-            context.result("Wrong login credentials, or the user does not exist.").status(404);
-        }
-
-
-    };
 
 
 

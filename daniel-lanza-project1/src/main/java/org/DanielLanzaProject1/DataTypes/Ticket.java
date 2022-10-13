@@ -24,10 +24,16 @@ public class Ticket {
     private boolean processed; // Initialized in the constructor
 
 
-
     // The constructors for the ticket objects.
+
+
     public Ticket(){
         this.status = statusCase[2];
+    }
+
+    public Ticket(int id,int status){
+        this.id=id;
+        this.status = statusCase[status];
     }
 
     public Ticket(double cash,String description){
@@ -125,10 +131,6 @@ public class Ticket {
 
 
     //Methods for ticket status.
-    public void changeStatus(int i){
-        this.setStatus(Ticket.statusCase[i]);
-    }
-
     public void processTicket(){
         this.processed = true;
     }
@@ -137,7 +139,7 @@ public class Ticket {
     public String toString() {
         String s = Integer.toString(this.getId()) + "    "
                 + Double.toString(this.getCash()) + "    "
-                + this.getDescription()
+                + this.getDescription() + "    "
                 + this.getStatus() + "    "
                 + this.getDate() + "\n";
         return s;

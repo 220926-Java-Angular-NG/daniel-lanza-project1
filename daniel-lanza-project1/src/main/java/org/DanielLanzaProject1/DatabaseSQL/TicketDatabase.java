@@ -136,7 +136,7 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
         try{
 
             String sql = "SELECT * FROM ticket_list "
-                       + "WHERE status = pending "
+                       + "WHERE status = 'pending' "
                        + "ORDER BY submission_date";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -218,8 +218,7 @@ public class TicketDatabase implements DatabaseInterface<Ticket>{
             ResultSet rs = pstmt.executeQuery();
 
 
-
-            return ticket;
+            return this.getId(ticket.getId());
 
         }catch (SQLException sqlException){
             System.out.println(sqlException.getMessage());
