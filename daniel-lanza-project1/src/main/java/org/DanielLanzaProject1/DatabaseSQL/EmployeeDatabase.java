@@ -156,7 +156,7 @@ public class EmployeeDatabase implements DatabaseInterface<Employee>{
     public Employee getByCredentials(String username, String password) {
 
         try{
-            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ? AND is_manager =false";
+            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ?";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             pstmt.setString(1,username);
             pstmt.setString(2,password);

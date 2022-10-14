@@ -11,13 +11,66 @@ import java.util.Objects;
 
 public class LogIn {
 
-    private String username;
-    private String password;
+    private static String currentUser;
+    private static int currentID = 0;
+    private static boolean currentlyManager;
+
+    private static final String employeeOps = "If you would like to post a new reimbursement ticket, please go\n"
+                               + "http://localhost:8080/employee=" + Integer.toString(currentID) +"/submit-ticket, and\n"
+                               + "submit a GET request for further instructions.\n\n"
+                               + "If would like to see your past ticket submissions, please go\n"
+                               + "http://localhost:8080/employee=" + Integer.toString(currentID) +"/submissions, and\n"
+                               + "submit a GET request for further instructions.\n\n"
+                               + "If you would like to Log Out, submit a GET request to\n"
+                               + "http://localhost:8080/employee=" + Integer.toString(currentID) +"/log-out.";
+
+    private static final String managerOps = "If you would like to view and process a reimbursement ticket, please go\n"
+                                + "http://localhost:8080/manager=" + currentID +"/process-ticket, and\n"
+                                + "submit a GET request for further instructions.\n\n"
+                                + "If would like to see the tickets that require attention, please go\n"
+                                + "http://localhost:8080/manager=" + currentID +"/pending-tickets, and\n"
+                                + "submit a GET request for further instructions.\n\n"
+                                + "If you would like to Log Out, submit a GET request to\n"
+                                + "http://localhost:8080/manager=" + currentID +"/log-out.";
+
     static EmployeeHandler employeeHandler = new EmployeeHandler();
     static TicketHandler ticketHandler = new TicketHandler();
     static ManagerHandler managerHandler = new ManagerHandler();
 
     public LogIn(){}
+
+
+    public static void setCurrentUser(String user){
+        currentUser = user;
+    }
+    public static void setCurrentID(int id){
+        currentID = id;
+    }
+
+    public static void setCurrentlyManager(boolean b){
+        currentlyManager = b;
+    }
+
+    public static void reset(){
+        currentUser = null;
+        currentID = 0;
+        currentlyManager = false;
+    }
+
+
+    public static String getCurrentUser(){
+        return currentUser;
+    }
+
+    public static int getCurrentID(){
+        return currentID;
+    }
+
+    public static boolean isCurrentlyManager(){
+        return currentlyManager;
+    }
+
+
 
 
     /**
@@ -102,22 +155,15 @@ public class LogIn {
 
     };
 
-
-
-
-
-
-
-
     public static Handler logInPage = context -> {
-        System.out.println("Im beinf called upon.");
+
         context.result("Welcome to ticket master's lon-in page.\n"
                 + "Please enter your username and password in the JSON format shown below\n"
                 +"\n"
                 +"\n"
                 +"{\n"
-                +"username: yourUsername\n"
-                +"password: yourPassword\n"
+                +"\"username\": \"yourUsername\", \n"
+                +"\"password\": \"yourPassword\" \n"
                 +"}\n"
                 +"\n"
                 +" and POST it at http://localhost:8080/log-in.\n");
@@ -125,18 +171,27 @@ public class LogIn {
 
     public static Handler userLogin = context -> {
         Manager m = context.bodyAsClass(Manager.class);
-
-        String u = m.getPassword();
+        String u = m.getUsername();
         String p = m.getPassword();
+
         m = managerHandler.getByCredentials(u,p);
-
         boolean exists = managerHandler.usernameExists(u);
-        boolean isManager = managerHandler.isManager(m);
+        boolean isManager = m.getIsManager();
 
-        if (exists && isManager){
 
-        }else if(exists && !isManager){
-
+        if (exists && !isManager){
+            Employee e = employeeHandler.getByCredentials(u,p);
+            LogIn.setCurrentUser(e.getUsername());
+            LogIn.setCurrentID(e.getId());
+            LogIn.setCurrentlyManager(false);
+            context.json(e);
+            context.result("Submit a GET request to http://localhost:8080/employee=" + currentID);
+        }else if(exists && isManager){
+            LogIn.setCurrentUser(m.getUsername());
+            LogIn.setCurrentID(m.getId());
+            LogIn.setCurrentlyManager(true);
+            context.json(m);
+            context.result("Submit a GET request to http://localhost:8080/manager=" + currentID);
         }else{
             context.result("Wrong login credentials, or the user does not exist.").status(404);
         }
@@ -144,6 +199,30 @@ public class LogIn {
 
     };
 
+    public static Handler session = context -> {
+
+        String firstName = "";
+        String lastName = "";
+        String sessionInstructions = "";
+        if((currentID>0)&&currentlyManager){
+            Manager m = managerHandler.getByID(currentID);
+            firstName = m.getFirstName();
+            lastName = m.getLastName();
+            sessionInstructions = managerOps;
+        }else if((currentID>0)&&(!currentlyManager)){
+            Employee e = employeeHandler.getByID(currentID);
+            firstName = e.getFirstName();
+            lastName = e.getLastName();
+            sessionInstructions = employeeOps;
+        }
+        context.result("Welcome " + firstName + " " + lastName + "! What would you like to do?\n\n"
+                      + sessionInstructions);
+    };
+
+    public static Handler logOut = context -> {
+       LogIn.reset();
+       context.result("You have logged out.");
+    };
 
 
 
@@ -199,14 +278,37 @@ public class LogIn {
     };
 
 
-    // Print an employee's previous tickets.
+    // Print an employee's previous ticket submissions.
     public static Handler getUserTickets = context -> {
         int employeeID = Integer.parseInt(context.pathParam("id"));
         context.result(ticketHandler.getPrintedTickets(employeeID));
     };
 
 
+
     // Ticketing system feature.
+    private static String pendingTickets(){
+        List<Ticket> list = ticketHandler.getAllPendingTickets();
+        String s = "";
+        for(Ticket t:list){
+            s = s + t.toString();
+        }
+        return s;
+    }
+
+    public static Handler processTicketInstructions = context -> {
+        context.result("Please enter the id of the ticket you wish to process and either \n"
+                + "a 0 for APPROVED or 1 for DECLINED in the JSON format shown below\n"
+                +"\n"
+                +"\n"
+                +"{\n"
+                +"\"id\": \"ticketID\", \n"
+                +"\"status\": \"yourChoice\" \n"
+                +"}\n"
+                +"\n"
+                +" and POST it at http://localhost:8080/manager="+context.pathParam("id")
+                +"/process-ticket"+".\n");
+    };
     public static Handler processTicket = context -> {
       Ticket ticket = context.bodyAsClass(Ticket.class);
       String status = Ticket.statusCase[Integer.parseInt(ticket.getStatus())];
@@ -226,7 +328,7 @@ public class LogIn {
           System.out.println(ticket.getIsProcessed());
 
           ticket = ticketHandler.updateTicket(ticket);
-          context.result("The status of the ticket has been successfully updated.");
+          context.result("The status of the ticket has been successfully updated.\n"+LogIn.pendingTickets());
       }else{
           context.result("Failed to update the ticket");
       }
@@ -235,12 +337,7 @@ public class LogIn {
     };
 
     public static Handler getPendingTickets = context -> {
-        List<Ticket> list = ticketHandler.getAllPendingTickets();
-        String s = "";
-        for(Ticket t:list){
-            s = s + t.toString();
-        }
-        context.result(s);
+        context.result(LogIn.pendingTickets());
     };
 
 

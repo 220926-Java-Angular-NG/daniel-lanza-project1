@@ -9,6 +9,8 @@ import java.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
+
 public class ManagerDatabase implements DatabaseInterface<Manager>{
 
 
@@ -161,7 +163,7 @@ public class ManagerDatabase implements DatabaseInterface<Manager>{
     public Manager getByCredentials(String username, String password) {
 
         try{
-            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ? AND is_manager = true";
+            String sql = "SELECT * FROM user_list WHERE username = ? AND password = ?";
             PreparedStatement pstmt = sqlDBconn.prepareStatement(sql);
             pstmt.setString(1,username);
             pstmt.setString(2,password);
@@ -180,6 +182,8 @@ public class ManagerDatabase implements DatabaseInterface<Manager>{
                 manager.setIsManager(rs.getBoolean("is_manager"));
 
             }
+
+
 
             return manager;
 
