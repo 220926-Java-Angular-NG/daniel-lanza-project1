@@ -15,7 +15,7 @@ public class LogIn {
     private static int currentID = 0;
     private static boolean currentlyManager;
 
-    private static final String employeeOps = "If you would like to post a new reimbursement ticket, please go\n"
+    private static String employeeOps = "If you would like to post a new reimbursement ticket, please go\n"
                                + "http://localhost:8080/employee=" + Integer.toString(currentID) +"/submit-ticket, and\n"
                                + "submit a GET request for further instructions.\n\n"
                                + "If would like to see your past ticket submissions, please go\n"
@@ -24,7 +24,7 @@ public class LogIn {
                                + "If you would like to Log Out, submit a GET request to\n"
                                + "http://localhost:8080/employee=" + Integer.toString(currentID) +"/log-out.";
 
-    private static final String managerOps = "If you would like to view and process a reimbursement ticket, please go\n"
+    private static String managerOps = "If you would like to view and process a reimbursement ticket, please go\n"
                                 + "http://localhost:8080/manager=" + currentID +"/process-ticket, and\n"
                                 + "submit a GET request for further instructions.\n\n"
                                 + "If would like to see the tickets that require attention, please go\n"
